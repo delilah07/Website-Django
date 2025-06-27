@@ -1,2 +1,4 @@
 # Website-Django
- website using Django, Postgres, Docker, Kubernetes
+blog website using Django
+
+
