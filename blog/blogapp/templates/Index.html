@@ -1,9 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load thumbnail %}
+
     <div class="container" style="  margin-top: 10px; ">
         {% for post in posts %}
             <article class="media content-section">
-                <img class="rounded-cirlce article-img" src="{{ posts.author.profile.image.url }}" alt="">
+                {% if user.profile.image %} 
+                    {% thumbnail user.profile.image "125x125" as img %}
+                        <img class="rounded-cirlce article-img" src="{{ img.url }}" alt="">
+                    {% endthumbnail %} 
+                {% endif %}
                 <div class="media-body">
                 <div class="article-metadata">
                     <a class="mr-2" href="#">{{ post.author }}</a>

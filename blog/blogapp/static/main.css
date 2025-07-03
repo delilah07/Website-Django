@@ -61,6 +61,7 @@ body {
     height: 65px;
     width: 65px;
     margin-right: 16px;
+      object-fit: cover;
   }
 
   .article-metadata {
@@ -85,8 +86,8 @@ body {
   .account-img {
     height: 125px;
     width: 125px;
-    margin-right: 20px;
     margin-bottom: 16px;
+    object-fit: cover;
   }
 
   .account-heading {
@@ -246,6 +247,12 @@ body {
     transition: 1s;
     background: linear-gradient(270deg, rgb(247, 0, 255) 0%, rgb(98, 0, 255) 100%);
   }
+  button#auth-links{
+    background: transparent;
+  }
+   button#auth-links:focus{
+    outline: none;
+   }
 
   /* a {
     text-decoration: none;
