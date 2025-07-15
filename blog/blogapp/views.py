@@ -1,35 +1,57 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Post
-
-posts = [
-    {
-        'author': 'Destiny Franks',
-        'title': "Blog post 1",
-        'content': 'This is my first blog post',
-        'date_posted': '7th August, 2021'
-    },
-    {
-        'author': 'Jane Doe',
-        'title': "Blog post 2",
-        'content': 'This is my first new blog post',
-        'date_posted': '14th August, 2021'
-    }
-]
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Create your views here.
-def home(request):
-    # return HttpResponse(
-    #     "<h1>Blog Home</h1>"
-    #     "<hr>"
-    #     "<button>Send</button>"
-    # )
-    context = {
-        # 'posts': posts
-        'posts': Post.objects.all()
-    }
-    return render(request, 'index.html', context)
+# def home(request):
+#     context = {
+#         'posts': Post.objects.all()
+#     }
+#     return render(request, 'index.html', context)
 
 def about(request):
-    # return HttpResponse("<h1>About Blog</h1>")
     return render(request, 'about.html', {'title': "About my blog"})
+
+class PostListView(LoginRequiredMixin, ListView):
+    model = Post
+    template_name = 'index.html'
+    context_object_name = 'posts'
+    ordering = ["-date_posted"]
+
+
+class PostDetailView(LoginRequiredMixin,  DetailView):
+    model = Post
+
+class PostCreateView(LoginRequiredMixin,  CreateView):
+    model = Post
+    fields = [ 'title', 'content']
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+    
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Post
+    fields = [ 'title', 'content']
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+    
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.author:
+            return True
+        return False
+
+class PostDeleteView(LoginRequiredMixin,  DeleteView):
+    model = Post
+    success_url = '/'
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.author:
+            return True
+        return False

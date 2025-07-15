@@ -61,7 +61,8 @@ body {
     height: 65px;
     width: 65px;
     margin-right: 16px;
-      object-fit: cover;
+    object-fit: cover;
+    border-radius: 50%;
   }
 
   .article-metadata {
